@@ -1,0 +1,240 @@
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #ffffff;
+    --accent-color: #0a0a0a; /* Neon Lime */
+    --grid-line: rgba(255, 255, 255, 0.1);
+    --font-mono: 'Courier New', Courier, monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    overflow: auto;
+    padding: 20px;
+}
+
+/* The neon border around the page */
+.border-frame {
+    position: fixed;
+    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    border: 2px solid var(--accent-color);
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Navigation */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-family: var(--font-mono);
+    padding: 10px 20px;
+}
+
+.menu a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin-left: 40px;
+}
+
+.menu a.active {
+    color: var(--accent-color);
+}
+
+/* Grid System */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: 60vh;
+    position: relative;
+    padding: 0 20px;
+}
+
+
+/* Make vertical guide lines span almost full viewport height with minimal gaps */
+.col-line {
+    position: fixed;
+    top: 18px;
+    bottom: 18px;
+    width: 0;
+    border-right: 1px dotted var(--grid-line);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Position each column line across the viewport */
+.grid-container .col-line:nth-child(1) { left: 10%; }
+.grid-container .col-line:nth-child(2) { left: 30%; }
+.grid-container .col-line:nth-child(3) { left: 50%; }
+.grid-container .col-line:nth-child(4) { left: 70%; }
+.grid-container .col-line:nth-child(5) { left: 90%; }
+
+/* Hero Section */
+.hero-text {
+    position: absolute;
+    top: 20%;
+    left: 20px;
+}
+
+/* Info page overrides: make the hero flow normally (no absolute positioning) */
+.page-info .hero-text {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.hero-text h1 {
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.9;
+    font-weight: 700;
+}
+
+/* Specific hero sizing for info page to balance the layout */
+.page-info .hero-text h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1;
+    margin: 0 0 8px 0;
+}
+
+/* Profile photo styling on info page */
+.page-info .profile-photo { width:100%; height:360px; object-fit:cover; border-radius:6px; display:block; }
+
+/* Make grid container expand on info page so content doesn't overlap */
+.page-info .grid-container {
+    height: auto;
+    min-height: 70vh;
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+/* Metadata (Designer & Location) */
+.meta-data {
+    grid-column: 4 / 6;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding-bottom: 50px;
+}
+
+/* Projects Footer */
+.project-gallery {
+    display: flex;
+    gap: 15px;
+    padding: 0 20px;
+    height: 25vh;
+}
+
+/* Individual project item */
+.project-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+}
+
+/* Make anchor fill the item so the whole tile is clickable */
+.project-item a {
+    display: block;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Images: round corners and smooth transitions */
+.project-item img {
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    border-radius: 10px;
+    transition: transform 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hovering the item lifts it slightly and reveals color */
+.project-item:hover {
+    transform: translateY(-6px);
+    z-index: 2;
+}
+
+.project-item:hover img {
+    filter: grayscale(0%);
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+
+/* When user hovers over gallery, non-hovered items blur & drop a little */
+.project-gallery:hover .project-item:not(:hover) {
+    filter: blur(3px);
+    transform: translateY(6px);
+    opacity: 0.65;
+}
+
+/* Label styling */
+.project-item span {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    margin-top: 8px;
+    color: var(--grid-line);
+    display: inline-block;
+    padding-left: 6px;
+}
+
+/* Scramble effect */
+.project-item { cursor: pointer; }
+
+/* Make links and buttons with .scramble-self appear as plain text (no box or effects) */
+.scramble-self {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+/* Scrolling/interaction char styling */
+.scramble-char { color: var(--accent-color); opacity: 0.95; transition: color 120ms ease; font-family: var(--font-mono); }
+
+
+
+/* Container Layout */
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Controls the space between [WORK] and INFO */
+}
+
+/* Button Styling */
+.nav-btn {
+  background-color: transparent; /* Makes the button background invisible */
+  border: none;                  /* Removes the default grey border */
+  cursor: pointer;               /* Changes mouse cursor to a hand on hover */
+  font-family: inherit;          /* Inherits font from your website */
+  font-size: inherit;            /* Inherits text size */
+  color: inherit;                /* Inherits text color */
+  padding: 0 5px;                /* Slight padding for clickability */
+}
+
+/* Green Brackets */
+.accent {
+  color: #9eff00;
+}

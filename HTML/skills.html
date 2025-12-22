@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahil Kumar Portfolio</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="page-info">
+    <div class="border-frame"></div>
+    
+    <nav class="top-nav" >
+        <strong style="color:#9eff00"><div class="logo scramble-self">SAHIL KUMAR</div></strong>
+      <nav class="menu">
+        <div class="nav-group">
+          <strong class="accent">[</strong>
+          <button onclick="location.href='index.html'" class="nav-btn scramble-self">WORK</button>
+          <strong class="accent">]</strong>
+        </div>
+
+        <button onclick="location.href='info.html'" class="nav-btn scramble-self">INFO</button>
+      </nav>
+    </nav>
+
+    <main class="grid-container">
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+
+        <section class="hero-text">
+            <h1 id="hero-name">SKILLS</h1>
+        <section class="info-content" style="margin-top: 70px; display:grid; grid-template-columns: 1fr 360px; column-gap: 40vw; row-gap:20px; align-items:flex-start;">
+            <div class="info-left" style="grid-column: 1 / -1;">
+              <strong style="color:#9eff00"><div class="scramble-self">COMPETITIVE CODING</div></strong>
+              <br>
+              <p style="font-size:16px; line-height:1.6; margin-top:6px;">
+                <a href="https://leetcode.com/u/sehrawat_miki/" style="color:inherit;" target="_blank" rel="noopener noreferrer">LeetCode</a> &nbsp;|&nbsp;
+                <a href="https://codeforces.com/profile/Sehrawat_Miki" style="color:inherit;" target="_blank" rel="noopener noreferrer">Codeforces</a> &nbsp;|&nbsp;
+                <a href="https://www.codechef.com/users/sehrawat_miki" style="color:inherit;" target="_blank" rel="noopener noreferrer">CodeChef</a>
+              </p>
+            </div>
+            <!-- Row 1: Programming languages (left) + image (right) -->
+            <div class="info-left" style="grid-column: 1;">
+              <strong style="color:#9eff00"><div class="scramble-self">PROGRAMMING LANGUAGES</div></strong>
+              <br>
+              <p style="font-size:20px; line-height:1.6;">C++<br>Java<br>SQL<br>JavaScript<br>HTML<br>CSS</p>
+            </div>
+            <aside class="info-right" style="grid-column: 2;">
+                <img src="../images/LANG.png" alt="Sahil Kumar" class="profile-photo" style="width:300px; height:300px; object-fit:cover; border-radius:6px; display:block;" />
+                <div style="margin-top:18px; font-family:var(--font-mono); font-size:12px; color:var(--grid-line);">
+                </div>
+            </aside>
+            <br>
+            <aside class="info-right" style="grid-column: 1;">
+                <img src="../images/FRAMEWORK.png" alt="Frameworks" class="profile-photo" style="width:300px; height:300px; object-fit:cover; border-radius:6px; display:block;" />
+            </aside>
+
+            <div class="info-left" style="grid-column: 2;">
+              <strong style="color:#9eff00"><div class="scramble-self">FRAMEWORKS</div></strong>
+              <br>
+              <p style="font-size:20px; line-height:1.6;">Springboot<br>Express<br>Lombok<br>Hibernate ORM</p>
+            </div>
+            <br>
+            <div class="info-left" style="grid-column: 1;">
+              <strong style="color:#9eff00"><div class="scramble-self">INTERPERSONAL SKILLS</div></strong>
+              <br>
+              <p style="font-size:20px; line-height:1.6;">Communication<br>Teamwork<br>Leadership<br>Problem Solving<br>Emotional Intelligence</p>
+            </div>
+            <aside class="info-right" style="grid-column: 2;">
+                <img src="../images/INTERPERSONAL.png" alt="Sahil Kumar" class="profile-photo" style="width:300px; height:300px; object-fit:cover; border-radius:6px; display:block;" />
+                <div style="margin-top:18px; font-family:var(--font-mono); font-size:12px; color:var(--grid-line);">
+                </div>
+            </aside>
+        </section>
+
+        </section>
+
+    </main>
+
+
+    <script>
+    (function(){
+      const chars = '!<>-_\\/[]{}—=+*^?0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      const heroEl = document.getElementById('hero-name');
+      const originalHeroText = 'INFO';
+      const originalHeroHTML = 'INFO';
+
+      function plainTextFromEl(el){
+        return (el.dataset.originalText || (el.textContent || '').replace(/\s+/g,' ').trim());
+      }
+
+      function setFinalText(el, target, asHTML){
+        if(asHTML) el.innerHTML = target;
+        else el.textContent = target;
+      }
+
+      function scrambleToElement(el, target, opts={}){
+        if(!el) return Promise.resolve();
+        if(el._scramble && el._scramble.cancel) el._scramble.cancel();
+        const fromText = plainTextFromEl(el);
+        target = (target||'').toUpperCase();
+        const length = Math.max(fromText.length, target.length);
+        const queue = [];
+        for(let i=0;i<length;i++){
+          const from = fromText[i] || '';
+          const to = target[i] || '';
+          const start = Math.floor(Math.random()*6);
+          const end = start + 4 + Math.floor(Math.random()*12);
+          queue.push({from,to,start,end,char:null});
+        }
+        let frame=0, raf, canceled=false;
+        el._scramble = {cancel: ()=> { canceled=true; cancelAnimationFrame(raf); }};
+        return new Promise(resolve=>{
+          function update(){
+            if(canceled){ resolve(); return; }
+            let output='';
+            let complete=0;
+            for(let i=0;i<queue.length;i++){
+              const q=queue[i];
+              if(frame >= q.end){
+                output += q.to;
+                complete++;
+              } else if(frame >= q.start){
+                if(!q.char || Math.random() < (opts.chance || 0.5)) q.char = chars[Math.floor(Math.random()*chars.length)];
+                output += '<span class="scramble-char">'+q.char+'<\/span>';
+              } else {
+                output += q.from;
+              }
+            }
+            el.innerHTML = output;
+            if(complete===queue.length){
+              if(opts.asHTML) setFinalText(el, opts.finalHTML || target, true);
+              else setFinalText(el, target, false);
+              resolve();
+              return;
+            }
+            frame++;
+            raf = requestAnimationFrame(update);
+          }
+          raf = requestAnimationFrame(update);
+        });
+      }
+
+      function scrambleHeroTo(target){
+        const useHTML = (target === originalHeroText);
+        return scrambleToElement(heroEl, target, {asHTML: useHTML, finalHTML: originalHeroHTML});
+      }
+
+      // project hover -> hero scramble
+      document.querySelectorAll('.project-item').forEach(item=>{
+        item.addEventListener('mouseenter', ()=> scrambleHeroTo(item.dataset.title || ''));
+        item.addEventListener('mouseleave', ()=> scrambleHeroTo(originalHeroText));
+      });
+
+      // self-scrambling elements (nav items, labels, meta)
+      document.querySelectorAll('.scramble-self').forEach(el=>{
+        el.dataset.originalText = (el.textContent || '').replace(/\s+/g,' ').trim();
+        const target = el.dataset.title || el.dataset.originalText;
+        el.addEventListener('mouseenter', ()=> scrambleToElement(el, target));
+        el.addEventListener('mouseleave', ()=> scrambleToElement(el, el.dataset.originalText));
+      });
+    })();
+    </script>
+</body>
+</html>

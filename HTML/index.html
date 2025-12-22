@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahil Kumar Portfolio</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="border-frame"></div>
+    
+    <nav class="top-nav" >
+        <strong style="color:#9eff00"><div class="logo scramble-self">SAHIL KUMAR</div></strong>
+        <div class="menu">
+      <nav class="menu">
+        <div class="nav-group">
+          <strong class="accent">[</strong>
+          <button onclick="location.href='index.html'" class="nav-btn scramble-self">WORK</button>
+          <strong class="accent">]</strong>
+        </div>
+
+        <button onclick="location.href='info.html'" class="nav-btn scramble-self">INFO</button>
+      </nav>
+        </div>
+    </nav>
+
+    <main class="grid-container">
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+        <div class="col-line"></div>
+
+        <section class="hero-text">
+            <h1 id="hero-name">SAHIL<br>KUMAR</h1>
+        </section>
+
+        <section class="meta-data">
+            <div class="role scramble-self" style="font-size: 24px;">CODER</div>
+            <strong style="color:#9eff00"><div class="location scramble-self" style="font-size: 20px;">たとえそれが私を殺すとしても<br></div></strong>
+        </section>
+    </main>
+
+    <footer class="project-gallery">
+        <div class="project-item" data-title="RESUME">
+            <a href="sahil_kumar_cv1.pdf" download aria-label="Download Sahil Kumar CV">
+                <img src="../images/resume.png" alt="Project 1">
+                <span class="scramble-self">[01]</span>
+            </a>
+        </div>
+        <div class="project-item" data-title="PROJECTS">
+            <a href="project.html" aria-label="Open Project 3">
+                <img src="../images/project.png" alt="Project 3">
+                <span class="scramble-self">[03]</span>
+            </a>
+        </div>
+        <div class="project-item" data-title="SKILLS">
+            <a href="skills.html" aria-label="Open Project 4">
+                <img src="../images/skills.png" alt="Project 4">
+                <span class="scramble-self">[04]</span>
+            </a>
+        </div>
+        <div class="project-item" data-title="HOBBIES">
+            <a href="hobbies.html" aria-label="Open Project 2">
+                <img src="../images/hobbies.png" alt="Project 2">
+                <span class="scramble-self">[02]</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+    (function(){
+      const chars = '!<>-_\\/[]{}—=+*^?0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+      const heroEl = document.getElementById('hero-name');
+      const originalHeroText = 'SAHIL KUMAR';
+      const originalHeroHTML = 'SAHIL<br>KUMAR';
+
+      function plainTextFromEl(el){
+        return (el.dataset.originalText || (el.textContent || '').replace(/\s+/g,' ').trim());
+      }
+
+      function setFinalText(el, target, asHTML){
+        if(asHTML) el.innerHTML = target;
+        else el.textContent = target;
+      }
+
+      function scrambleToElement(el, target, opts={}){
+        if(!el) return Promise.resolve();
+        if(el._scramble && el._scramble.cancel) el._scramble.cancel();
+        const fromText = plainTextFromEl(el);
+        target = (target||'').toUpperCase();
+        const length = Math.max(fromText.length, target.length);
+        const queue = [];
+        for(let i=0;i<length;i++){
+          const from = fromText[i] || '';
+          const to = target[i] || '';
+          const start = Math.floor(Math.random()*6);
+          const end = start + 4 + Math.floor(Math.random()*12);
+          queue.push({from,to,start,end,char:null});
+        }
+        let frame=0, raf, canceled=false;
+        el._scramble = {cancel: ()=> { canceled=true; cancelAnimationFrame(raf); }};
+        return new Promise(resolve=>{
+          function update(){
+            if(canceled){ resolve(); return; }
+            let output='';
+            let complete=0;
+            for(let i=0;i<queue.length;i++){
+              const q=queue[i];
+              if(frame >= q.end){
+                output += q.to;
+                complete++;
+              } else if(frame >= q.start){
+                if(!q.char || Math.random() < (opts.chance || 0.5)) q.char = chars[Math.floor(Math.random()*chars.length)];
+                output += '<span class="scramble-char">'+q.char+'<\/span>';
+              } else {
+                output += q.from;
+              }
+            }
+            el.innerHTML = output;
+            if(complete===queue.length){
+              if(opts.asHTML) setFinalText(el, opts.finalHTML || target, true);
+              else setFinalText(el, target, false);
+              resolve();
+              return;
+            }
+            frame++;
+            raf = requestAnimationFrame(update);
+          }
+          raf = requestAnimationFrame(update);
+        });
+      }
+
+      function scrambleHeroTo(target){
+        const useHTML = (target === originalHeroText);
+        return scrambleToElement(heroEl, target, {asHTML: useHTML, finalHTML: originalHeroHTML});
+      }
+
+      // project hover -> hero scramble
+      document.querySelectorAll('.project-item').forEach(item=>{
+        item.addEventListener('mouseenter', ()=> scrambleHeroTo(item.dataset.title || ''));
+        item.addEventListener('mouseleave', ()=> scrambleHeroTo(originalHeroText));
+      });
+
+      // self-scrambling elements (nav items, labels, meta)
+      document.querySelectorAll('.scramble-self').forEach(el=>{
+        el.dataset.originalText = (el.textContent || '').replace(/\s+/g,' ').trim();
+        const target = el.dataset.title || el.dataset.originalText;
+        el.addEventListener('mouseenter', ()=> scrambleToElement(el, target));
+        el.addEventListener('mouseleave', ()=> scrambleToElement(el, el.dataset.originalText));
+      });
+    })();
+    </script>
+</body>
+</html>
